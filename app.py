@@ -4,13 +4,15 @@ from flask_socketio import SocketIO
 from flask_cors import CORS
 
 
-userName = dict()
+userName = {"0":"",
+            "1":"",
+            'spec': []}
 i = 0
 usersLogged = False
 
-def resetLogins():
-    userName.clear()
-
+def addSpectators(userName):
+    userName['spec'] = list()
+    userName['spec'].append(userName)
 #FLASK
 app = Flask(__name__, static_folder='./build/static')
 
@@ -41,15 +43,17 @@ def on_disconnect():
     
 @socketio.on('loginStatus')
 def userLogin(data):
+    # print(userName["0"])
     print(str(data))
     global i 
     global usersLogged 
-    if(len(userName) == 2):
-        resetLogins()
-        i = 0
-    if(len(userName) < 2):
-        userName[i] = str(data["name"])
-        i+=1
+    if(userName["0"] == ""):
+        userName["0"] = str(data['name'])
+    elif(userName["1"] == ""):
+        userName["1"] = str(data['name'])
+    else:
+        userName['spec'].append(str(data['name']))
+    
     print(userName)
     socketio.emit('updateUser', userName, broadcast=True, include_self=False)
 

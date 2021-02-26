@@ -12,8 +12,20 @@ function Board({ user }){
     let [ setPlayer, setPlayerState ] = useState(0);
 
     function play(index, user){
-        console.log(user);
         let boardChange = [...board];
+        console.log(user);
+        console.log(setPlayer);
+        console.log(players[setPlayer]);
+        if(boardChange[index] === ""){
+            if(user === players[setPlayer]){
+                
+            }
+            else {
+                alert("You are not Playing!");
+                return;
+            }
+        }
+        
         if(boardChange[index] === ""){
             if(setPlayer === 0){
                 boardChange[index] = "X";

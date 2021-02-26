@@ -1,0 +1,13 @@
+.loginBox{
+    padding: 10px;
+}
+
+.button{
+    margin:0 auto;
+    display:block;
+}
+
+.header{
+    white-space: nowrap;
+    text-align: center;
+}

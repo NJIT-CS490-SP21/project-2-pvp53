@@ -18,3 +18,8 @@
   text-align: center;
   /* Shows the lines in the CSS grid */
 }
+
+.userName{
+  text-align: center;
+  font-size: 50px;
+}

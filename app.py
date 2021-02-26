@@ -41,7 +41,7 @@ def on_disconnect():
     
 @socketio.on('loginStatus')
 def userLogin(data):
-    print(str(data["name"]))
+    print(str(data))
     global i 
     global usersLogged 
     if(len(userName) == 2):
@@ -50,6 +50,7 @@ def userLogin(data):
     if(len(userName) < 2):
         userName[i] = str(data["name"])
         i+=1
+    print(userName)
     socketio.emit('updateUser', userName, broadcast=True, include_self=False)
 
 @socketio.on('boardChange')

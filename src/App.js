@@ -8,10 +8,11 @@ const socket = io(); // Connects to socket connection
 
 function App() {
 
-
+    const [ user, setUser] = useState("");
     const [ loggedIn, setLoginStatus] = useState(false);
 
     function fillUser(userName){
+        setUser(userName);
         setLoginStatus(!loggedIn);
         socket.emit('loginStatus', {name: userName});
     }
@@ -19,7 +20,7 @@ function App() {
     return (
     <div class = "square">
       {loggedIn
-        ? <Board />
+        ? <Board user={user}/>
         : <Login userData={fillUser}  />
       }
     </div>

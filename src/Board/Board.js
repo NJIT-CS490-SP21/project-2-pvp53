@@ -10,7 +10,7 @@ function Board({ user }){
     const [ players, setPlayers ]  = useState({});
     const [ board, changeBoardArr ] = useState(Array(9).fill(''));
     const [ setPlayer, setPlayerState ] = useState(0);
-    const [ winner, setWinner] = useState();
+    const [ gameStatus, setGameStatus] = useState();
 
     function play(index, user){
         let boardChange = [...board];
@@ -27,24 +27,31 @@ function Board({ user }){
                     boardChange[index] = "O";
                     setPlayerState(0);
                 }
-                changeBoardArr(boardChange)
+                changeBoardArr(boardChange);
                 socket.emit('boardChange', {boardData: boardChange, setPlayerState: setPlayer });
+                let gameStatus = checkWinner(boardChange);
+                console.log(gameStatus);
+                if(typeof gameStatus === "undefined"){
+                    setGameStatus("In Progress");
+                }
+                else if(gameStatus == players[setPlayer]){
+                    setGameStatus("Winner is: " + players[setPlayer]);
+                    return;
+                }
+                else{
+                    setGameStatus("Drawn");
+                    return;
+                }
+                console.log("BoardChange:");
+                console.log(boardChange);
+                
             }
             else {
                 alert("You are not Playing!");
                 return;
             }
             
-            let gameStatus = checkWinner(board, user);
-            if(!gameStatus){
-                setWinner("In Progress");
-            }
-            else if(gameStatus == players[setPlayer]){
-                setWinner(players[setPlayer]);
-            }
-            else{
-                setWinner("Drawn");
-            }
+            
         }
         else{
             alert('Invalid Box!');
@@ -58,8 +65,8 @@ function Board({ user }){
         });
     }
     
-    function checkWinner(boardData, user){
-        console.log(boardData);
+    function checkWinner(board){
+        console.log(board);
         const lines = [
             [0, 1, 2],
             [3, 4, 5],
@@ -72,7 +79,8 @@ function Board({ user }){
         ];
         for( let i = 0; i < lines.length; i++){
             const[a,b,c] = lines[i];
-            if(boardData[a] && boardData[a] === boardData[b] && boardData[a] === boardData[c]){
+            if(board[a] && board[a] === board[b] && board[a] === board[c]){
+                console.log(user);
                 return user;
             }
         }
@@ -98,7 +106,7 @@ function Board({ user }){
     return (
         <div class = "b">
             <div>
-                {winner}
+                {gameStatus}
             </div>
             <div class="userName">
                 {user}

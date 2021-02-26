@@ -1,50 +1,70 @@
 import { useState, useEffect } from 'react';
 import { Square } from '../';
- import io from 'socket.io-client';
+import io from 'socket.io-client';
 import './Board.css';
 
-
-
-// const socket = io(); //Connects to socket connection
 const socket = io(); // Connects to socket connection
 
 function Board(){
-    
+
+    //console.log(users);
+    let players = {}
+    //const [ players, setPlayers ]  = useState({});
     const [ board, changeBoardArr ] = useState(Array(9).fill(''));
     let [ setPlayer, setPlayerState ] = useState(0);
-    
+
     function playerRes(e){
-        //let index = e.target.id;
-        //let val = e.target.innerHTML;
-        let val = [...board];
-        
-        if(val[e] === ""){
+        let boardChange = [...board];
+        if(boardChange[e] === ""){
             if(setPlayer === 0){
-                val[e] = "X";
+                boardChange[e] = "X";
                 setPlayerState(1);
             }
-            else{
-                val[e] = "O";
+            else {
+                boardChange[e] = "O";
                 setPlayerState(0);
             }
-            changeBoardArr(val);
-            socket.emit('boardChange', {val: val, setPlayerState: setPlayer});
+            changeBoardArr(boardChange);
+            socket.emit('boardChange', {boardData: boardChange, setPlayerState: setPlayer });
         }
     }
-    
-    useEffect(() =>{
+
+    function updateUsers(){
+        socket.on('updateUser', (data) => {
+            Object.assign(players, data);
+            console.log(players);
+            // Object.keys(data).map((item) => (
+            //     setPlayers((prevState) => {
+            //         return { ...prevState, item: data[item]};
+            //     })
+            // ));
+            // console.log(players);
+            // let p = {...data}
+            // console.log(p);
+            // setPlayers(data);
+            // dummy();
+            //console.log(players);
+        });
+    }
+
+    function updateBoard(){
         socket.on('boardChange', (data) => {
-            changeBoardArr([...data.val]);
+            changeBoardArr([...data.boardData]);
             if(data.setPlayerState  === 1){
                 setPlayerState(0);
             }
             else{
                 setPlayerState(1);
             }
-            
-        }); 
+            console.log(board);
+        });
+    }
+
+    useEffect(() =>{
+        updateUsers();
+        updateBoard();
     }, []);
-    
+
     return (
         <div class="board">
             {board.map((item, index) => <Square item={item} onClickButton = {() => playerRes(index)} /> )}
@@ -53,4 +73,3 @@ function Board(){
 }
 
 export default Board;
-

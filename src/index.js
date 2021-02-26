@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 export {default as Board } from './Board/Board';
 export {default as Square } from './Board/Square';
+export {default as Login } from './LoginStatus/Login';
 
 ReactDOM.render(
   <React.StrictMode>

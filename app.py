@@ -47,9 +47,9 @@ def userLogin(data):
     print(str(data))
     global i 
     global usersLogged 
-    if(userName["0"] == ""):
+    if((userName["0"] == "") or (userName["0"] == str(data['name']))):
         userName["0"] = str(data['name'])
-    elif(userName["1"] == ""):
+    elif((userName["1"] == "") or (userName["1"] == str(data['name']))):
         userName["1"] = str(data['name'])
     else:
         userName['spec'].append(str(data['name']))

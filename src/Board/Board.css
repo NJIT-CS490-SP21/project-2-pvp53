@@ -10,10 +10,6 @@
 .body{
   background-color: red;
 }
-/*.board{*/
-/*  margin: auto;*/
-/*  width: 50%;*/
-/*}*/
 
 .box {
   border: 1px solid black;
@@ -24,18 +20,25 @@
 
 .userName{
   text-align: center;
-  font-size: 50px;
+  font-size: 70px;
 }
 
 .gameStatus{
-  background-color: blue;
-  font-size: 100px;
+  text-align: center;
+  font-size: 80px;
 }
 
 .button{
-  
+  text-align: center;
 }
 
-.header{
-  
+ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+
+.list{
+  text-align: center;
 }

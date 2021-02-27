@@ -96,10 +96,11 @@ function Board({ user }){
     
 
     return (
-        <div class = "b">
-            <div class="gameStatus">
+        
+        <div>
+            <h1 class="gameStatus">
                 {gameStatus}
-            </div>
+            </h1>
             <div class="userName">
                 {user}
             </div>
@@ -109,11 +110,13 @@ function Board({ user }){
             <div class = "button">
                 <button  onClick = {resetBoard} > Reset Board </button>
             </div>
-            <div class = "spec">
-                <h1 class="header">
+            <div class="list">
+                <h2>
                     Speactators
-                </h1>
-                {players['spec'].map((player) => <ul> { player } </ul>)}
+                </h2>
+                <ul>
+                    {players['spec'].map((player) => <li> { player } </li> )}
+                </ul>
             </div>
         </div>
     );

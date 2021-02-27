@@ -18,7 +18,12 @@ function App() {
     }
 
     return (
-    <div class = "square">
+    <div>
+        <div class="t">
+            <h1>
+                Tic-Tac-Toe
+            </h1>
+        </div>
       {loggedIn
         ? <Board user={user}/>
         : <Login userData={fillUser}  />

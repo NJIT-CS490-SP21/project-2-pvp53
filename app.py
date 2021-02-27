@@ -7,12 +7,14 @@ from flask_cors import CORS
 userName = {"0":"",
             "1":"",
             'spec': []}
-i = 0
+            
 usersLogged = False
 
 def addSpectators(userName):
     userName['spec'] = list()
     userName['spec'].append(userName)
+    
+
 #FLASK
 app = Flask(__name__, static_folder='./build/static')
 

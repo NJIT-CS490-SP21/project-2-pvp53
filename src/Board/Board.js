@@ -10,13 +10,13 @@ function Board({ user }){
     const [ players, setPlayers ]  = useState({ "O": "", "1": "", "spec": [] });
     const [ board, changeBoardArr ] = useState(Array(9).fill(''));
     const [ setPlayer, setPlayerState ] = useState(0);
-    //const [ gameStatus, setGameStatus] = useState(true);
-    //let gameStatus = "";
+    const [ playerStatus, setPlayerStatus] = useState(false);
 
     function play(index, user){
         let boardChange = [...board];
         if(boardChange[index] === ""){
             if(user === players[setPlayer]){
+                setPlayerStatus(true);
                 if(setPlayer == 0){
                     boardChange[index] = "X";
                     setPlayerState(1);
@@ -41,12 +41,18 @@ function Board({ user }){
     function updateUsers(){
         socket.on('updateUser', (data) => {
             const uData = {...data}
-            console.log(uData);
             setPlayers({...players, ...uData});
         });
     }
     
-
+    function resetPlayerState(){
+        if(setPlayer == 0){
+            setPlayerState(1);
+        }
+        else{
+            setPlayerState(0);
+        }
+    }
 
     function updateBoard(){
         socket.on('boardChange', (data) => {
@@ -64,12 +70,7 @@ function Board({ user }){
         let emptyArr = [...board];
         emptyArr.fill("");
         changeBoardArr(emptyArr);
-        if(setPlayer == 0){
-            setPlayerState(1);
-        }
-        else{
-            setPlayerState(0);
-        }
+        resetPlayerState();
         socket.emit('boardChange', {boardData: emptyArr, setPlayerState: setPlayer })
     }
     
@@ -107,9 +108,11 @@ function Board({ user }){
             <div class="board">
                 {board.map((item, index) => <Square item={item} onClickButton = {() => play(index, user)} /> )}
             </div>
-            <div class = "button">
-                <button  onClick = {resetBoard} > Reset Board </button>
-            </div>
+            { playerStatus && 
+                <div class = "button">
+                    <button  onClick = {resetBoard} > Reset Board </button>
+                </div>
+            }
             <div class="list">
                 <h2>
                     Speactators

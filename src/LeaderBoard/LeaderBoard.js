@@ -2,8 +2,12 @@ import io from 'socket.io-client';
 import { useState, useEffect } from 'react';
 import './LeaderBoard.css';
 
+const socket = io(); // Connects to socket connection
 
-export function LeaderBoard(){
+
+export function LeaderBoard( {leaderBoard} ){
+    
+    console.log(leaderBoard);
     
     return (
         <div>

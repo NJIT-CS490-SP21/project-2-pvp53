@@ -37,14 +37,16 @@ def addUsertoDB(username):
         new_user = models.Person(username=username, scores=100)
         db.session.add(new_user)
         db.session.commit()
-        players = []
-        global playerIndex
-        players.append(
-            {str(playerIndex): new_user.username,
-            'scores' : 100
-        })
-        playerIndex+=1
-        print("User Added", players)
+        players = updateLeadeBoard()
+        socketio.emit('updateLeaderBoard', players, broadcast=True, include_self=False)
+
+def updateLeadeBoard():
+    players = []
+    dbData = models.Person.query.order_by(models.Person.scores).all()
+    for user in dbData:
+        players.append({user.username : user.scores})
+    print(players)
+    return players
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 socketio = SocketIO(
@@ -84,23 +86,11 @@ def on_join(data): # data is whatever arg you pass in your emit call on client
       .update({models.Person.scores: models.Person.scores - 1 })
     db.session.commit()
     
+    players = updateLeadeBoard()
+    socketio.emit('updateLeaderBoard', players, broadcast=True, include_self=False)
     
-    # leadboard = models.Person.query.all();
-    
-    # for user in leadboard:
-        # user.username = username
-        # user.score = score
     
 
-    # new_user = models.Person(username=data['0'], scores=data["score"])
-    # db.session.add(new_user)
-    # db.session.commit()
-    # all_people = models.Person.query.all()
-    # users = []
-    # for person in all_people:
-    #     users.append(person.username)
-    # print("Here", users)
-    # socketio.emit('user_list', {'users': users})
     
 @socketio.on('loginStatus')
 def userLogin(data):

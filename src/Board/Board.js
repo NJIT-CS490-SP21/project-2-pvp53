@@ -13,6 +13,7 @@ function Board({ user }){
     const [ setPlayer, setPlayerState ] = useState(0);
     const [ playerStatus, setPlayerStatus] = useState(false);
     const [ showandHide, setShowAndHide] = useState(false);
+    const [ leaderBoard, setleaderBoard ] = useState([]);
     let gameStatus;
     let winnerorno = "";
 
@@ -42,6 +43,7 @@ function Board({ user }){
                 alert("You are not Playing!");
                 return;
             }
+            updateLeaderBoard();
         }
         else{
             alert('Invalid Box!');
@@ -77,8 +79,9 @@ function Board({ user }){
     }
     
     function updateLeaderBoard(data){
-        socket.on('user_list', (data) =>{
+        socket.on('updateLeaderBoard', (data) =>{
             console.log(data);
+            setleaderBoard([{data}]);
         });   
     }
 
@@ -149,7 +152,7 @@ function Board({ user }){
                 <button onClick={onShowHide}> Leaderboard </button>
                 <div id="leaderboard" >
                 
-                    {showandHide &&  <LeaderBoard />}
+                    {showandHide &&  <LeaderBoard  leaderBoard={leaderBoard}/>}
                 </div>
             </div>
         </div>

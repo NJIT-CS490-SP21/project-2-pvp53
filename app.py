@@ -33,16 +33,15 @@ playerIndex = 0
 def addUsertoDB(username):
     new_user = models.Person.query.filter_by(username=username).all()
     print("New User", new_user)
-    if(new_user == None):
+    if new_user is None:
         new_user = models.Person(username=username, scores=100)
         db.session.add(new_user)
         db.session.commit()
-        players = updateLeadeBoard()
-        socketio.emit('updateLeaderBoard', players, broadcast=True, include_self=False)
+        
 
 def updateLeadeBoard():
     players = []
-    dbData = models.Person.query.order_by(models.Person.scores).all()
+    dbData = models.Person.query.order_by(models.Person.scores.desc()).all()
     for user in dbData:
         players.append({user.username : user.scores})
     print(players)
@@ -79,18 +78,15 @@ def on_join(data): # data is whatever arg you pass in your emit call on client
     print(winner, loser)
     db.session.query(models.Person)\
       .filter(models.Person.username == winner)\
-      .update({models.Person.scores: models.Person.scores + 1 })
+      .update({models.Person.scores: models.Person.scores + 1})
                    
     db.session.query(models.Person)\
       .filter(models.Person.username == loser)\
-      .update({models.Person.scores: models.Person.scores - 1 })
+      .update({models.Person.scores: models.Person.scores - 1})
     db.session.commit()
-    
     players = updateLeadeBoard()
+    print(players)
     socketio.emit('updateLeaderBoard', players, broadcast=True, include_self=False)
-    
-    
-
     
 @socketio.on('loginStatus')
 def userLogin(data):
@@ -104,6 +100,8 @@ def userLogin(data):
             userName['spec'].append(str(data['name']))
     
     addUsertoDB(data['name'])
+    players = updateLeadeBoard()
+    socketio.emit('updateLeaderBoard', players, broadcast=True, include_self=False)
     socketio.emit('updateUser', userName, broadcast=True, include_self=False)
     
 

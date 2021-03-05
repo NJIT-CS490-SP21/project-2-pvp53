@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import './LeaderBoard.css';
 
 const socket = io(); // Connects to socket connection
@@ -7,28 +7,37 @@ const socket = io(); // Connects to socket connection
 
 export function LeaderBoard( {leaderBoard} ){
     
-    console.log(leaderBoard);
+    leaderBoard.map((item, index) =>{
+        Object.keys(item).map(key =>{
+            
+            
+        })
+    });
+
     
     return (
-        <div>
-            <table>
-                <thead>
-                    <tr>
-                        <th colSpan="2"> LeaderBoard </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                        Hello World
-                        </td>
-                        <td>
-                        Hello World
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th colSpan="2"> LeaderBoard </th>
+                </tr>
+            </thead>
+            <tbody>
+                {leaderBoard.map((item) =>
+                        Object.keys(item).map(key=>
+                            <tr>
+                                <td> 
+                                    {key} 
+                                </td>
+                                <td> 
+                                    {item[key]} 
+                                </td>
+                            </tr>
+                        )
+                    )
+                }
+            </tbody>
+        </table>
     );
 }
 

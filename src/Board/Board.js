@@ -43,7 +43,6 @@ function Board({ user }){
                 alert("You are not Playing!");
                 return;
             }
-            updateLeaderBoard();
         }
         else{
             alert('Invalid Box!');
@@ -81,7 +80,7 @@ function Board({ user }){
     function updateLeaderBoard(data){
         socket.on('updateLeaderBoard', (data) =>{
             console.log(data);
-            setleaderBoard([data]);
+            setleaderBoard(data);
         });   
     }
 
@@ -147,12 +146,11 @@ function Board({ user }){
                         {players['spec'].map((player) => <li> { player } </li> )}
                     </ul>
                 </div>
-            </div>
-            <div class="leader">
-                <button onClick={onShowHide}> Leaderboard </button>
-                <div id="leaderboard" >
-                
-                    {showandHide &&  <LeaderBoard  leaderBoard={leaderBoard}/>}
+                <div class="leaderboard">
+                    <button onClick={onShowHide}> Leaderboard </button>
+                    <div id="leaderboard" >
+                        {showandHide &&  <LeaderBoard  leaderBoard={leaderBoard}/>}
+                    </div>
                 </div>
             </div>
         </div>

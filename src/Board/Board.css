@@ -6,24 +6,19 @@
   grid-template-rows: repeat(3, 1fr); /* Total vertical space broken into 3 rows */
   margin: auto;
   left:0;
-  float:left; 
-  width:300px; 
-  height:300px; 
 }
 
-.spec{
-  float:right; 
-  width:300px; 
-  height:300px; 
+.spec, .leaderboard, .board{
+  width: 300px;
+  float:left;
 }
+
+
 
 .container{
-  width:800px; 
-  height:300px; 
-  padding-top:20px; 
-  padding-left:300px; 
-  padding-right:15px;
-  overflow:hidden;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minimax(300px, 1fr));
+  grid-column-gap: 5px;
 }
 
 .body{

@@ -88,7 +88,7 @@ function Board({ user }){
         let emptyArr = [...board];
         emptyArr.fill("");
         changeBoardArr(emptyArr);
-        resetPlayerState();
+       // resetPlayerState();
         socket.emit('boardChange', {boardData: emptyArr, setPlayerState: setPlayer })
     }
     
@@ -129,15 +129,15 @@ function Board({ user }){
             <div class="userName">
                 {user}
             </div>
+            <div class = "button">
+                    {playerStatus && 
+                        <button  onClick = {resetBoard} > Reset Board </button>
+                    }
+            </div>
             <div class="container">
                 <div class="board">
                     {board.map((item, index) => <Square item={item} onClickButton = {() => play(index, user)} /> )}
                 </div>
-                {playerStatus && 
-                    <div class = "button">
-                        <button  onClick = {resetBoard} > Reset Board </button>
-                    </div>
-                }
                 <div class="spec">
                     <h2>
                         Speactators
@@ -147,7 +147,7 @@ function Board({ user }){
                     </ul>
                 </div>
                 <div class="leaderboard">
-                    <button onClick={onShowHide}> Leaderboard </button>
+                    <button onClick={onShowHide}> LeaderBoard </button>
                     <div id="leaderboard" >
                         {showandHide &&  <LeaderBoard  leaderBoard={leaderBoard}/>}
                     </div>

@@ -31,9 +31,9 @@ playerIndex = 0
 
 #cd notes/react/react-starter
 def addUsertoDB(username):
-    new_user = models.Person.query.filter_by(username=username).all()
+    new_user = models.Person.query.filter_by(username=username).first()
     print("New User", new_user)
-    if new_user is None:
+    if new_user == None:
         new_user = models.Person(username=username, scores=100)
         db.session.add(new_user)
         db.session.commit()

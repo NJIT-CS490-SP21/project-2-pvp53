@@ -6,19 +6,30 @@
   grid-template-rows: repeat(3, 1fr); /* Total vertical space broken into 3 rows */
   margin: auto;
   left:0;
-}
-
-.spec, .leaderboard, .board{
-  width: 300px;
   float:left;
 }
+
+.spec{
+  text-align:center;
+  float:left;
+  width:300px;
+  height:300px;
+
+}
+.leaderboard{
+  float:right;
+  width:300px;
+  height:300px;
+}
+
 
 
 
 .container{
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minimax(300px, 1fr));
-  grid-column-gap: 5px;
+  margin:auto;
+  grid-template-columns: repeat(3, 1fr); 
+  height:900px;
+  width:900px;
 }
 
 .body{

@@ -1,26 +1,52 @@
 import os
-from flask import Flask, send_from_directory, json, session
+from flask import Flask, send_from_directory, json
 from flask_socketio import SocketIO
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv, find_dotenv
 
+load_dotenv(find_dotenv()) # This is to load your env variables from .env
 
-userName = {"0":"",
-            "1":"",
-            'spec': []}
-            
-usersLogged = False
-
-def addSpectators(userName):
-    userName['spec'] = list()
-    userName['spec'].append(userName)
-    
-
-#FLASK
 app = Flask(__name__, static_folder='./build/static')
+# Point SQLAlchemy to your Heroku database
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+# Gets rid of a warning
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-#SOCKET_IO
+db = SQLAlchemy(app)
+# IMPORTANT: This must be AFTER creating db variable to prevent
+# circular import issues
+import models
+db.create_all()
+
+# #GLOBAL VARIABLES
+userName = {
+    "0":"",
+    "1":"",
+    'spec': []
+}
+
+playerIndex = 0
+# players = []
+
+#cd notes/react/react-starter
+def addUsertoDB(username):
+    new_user = models.Person.query.filter_by(username=username).all()
+    print("New User", new_user)
+    if(new_user == None):
+        new_user = models.Person(username=username, scores=100)
+        db.session.add(new_user)
+        db.session.commit()
+        players = []
+        global playerIndex
+        players.append(
+            {str(playerIndex): new_user.username,
+            'scores' : 100
+        })
+        playerIndex+=1
+        print("User Added", players)
+
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
-
 socketio = SocketIO(
     app,
     cors_allowed_origins="*",
@@ -43,30 +69,64 @@ def on_connect():
 def on_disconnect():
     print('User disconnected!')
     
+@socketio.on('gameStatus')
+def on_join(data): # data is whatever arg you pass in your emit call on client
+    print("Here", str(data))
+    winner = data['win']
+    loser = data['lose']
+    print(winner, loser)
+    db.session.query(models.Person)\
+      .filter(models.Person.username == winner)\
+      .update({models.Person.scores: models.Person.scores + 1 })
+                   
+    db.session.query(models.Person)\
+      .filter(models.Person.username == loser)\
+      .update({models.Person.scores: models.Person.scores - 1 })
+    db.session.commit()
+    
+    
+    # leadboard = models.Person.query.all();
+    
+    # for user in leadboard:
+        # user.username = username
+        # user.score = score
+    
+
+    # new_user = models.Person(username=data['0'], scores=data["score"])
+    # db.session.add(new_user)
+    # db.session.commit()
+    # all_people = models.Person.query.all()
+    # users = []
+    # for person in all_people:
+    #     users.append(person.username)
+    # print("Here", users)
+    # socketio.emit('user_list', {'users': users})
+    
 @socketio.on('loginStatus')
 def userLogin(data):
-    # print(userName["0"])
-    print(str(data))
-    global i 
     global usersLogged 
     if((userName["0"] == "") or (userName["0"] == str(data['name']))):
         userName["0"] = str(data['name'])
     elif((userName["1"] == "") or (userName["1"] == str(data['name']))):
         userName["1"] = str(data['name'])
     else:
-        userName['spec'].append(str(data['name']))
+        if(str(data['name']) not in userName['spec']):
+            userName['spec'].append(str(data['name']))
     
-    print(userName)
+    addUsertoDB(data['name'])
     socketio.emit('updateUser', userName, broadcast=True, include_self=False)
+    
 
 @socketio.on('boardChange')
 def onChange(boardData):
     print(str(boardData))
     socketio.emit('boardChange', boardData, boradcast=True, include_self=False)
     
-socketio.run(
-    app,
-    host=os.getenv('IP', '0.0.0.0'),
-    port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
-)
-
+    
+if __name__ == "__main__":
+# Note that we don't call app.run anymore. We call socketio.run with app arg
+    socketio.run(
+        app,
+        host=os.getenv('IP', '0.0.0.0'),
+        port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
+    )

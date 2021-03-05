@@ -7,6 +7,7 @@ export {default as Board } from './Board/Board';
 export {default as Square } from './Board/Square';
 export {default as Winner } from './Board/Winner';
 export {default as Login } from './LoginStatus/Login';
+// export {default as Leaderboard } from './LeaderBoard/LeaderBoard';
 
 ReactDOM.render(
   <React.StrictMode>

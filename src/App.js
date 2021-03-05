@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Board } from './';
-import { Login } from './';
+import { Board, Login } from './';
 import io from 'socket.io-client';
 import './App.css';
 

@@ -5,10 +5,29 @@
 	grid-template-columns: repeat(3, 1fr); /* Total horizontal space broken into 3 columns */
   grid-template-rows: repeat(3, 1fr); /* Total vertical space broken into 3 rows */
   margin: auto;
+  left:0;
+  float:left; 
+  width:300px; 
+  height:300px; 
+}
+
+.spec{
+  float:right; 
+  width:300px; 
+  height:300px; 
+}
+
+.container{
+  width:800px; 
+  height:300px; 
+  padding-top:20px; 
+  padding-left:300px; 
+  padding-right:15px;
+  overflow:hidden;
 }
 
 .body{
-  background-color: #FBEEE4;
+  background-color: #E6DCC7;
 }
 
 .box {
@@ -38,7 +57,9 @@ ul{
   padding: 0;
 }
 
-
-.list{
-  text-align: center;
+.leader{
+  padding-top:100px;
 }
+
+
+

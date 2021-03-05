@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Square, Winner} from '../';
+import  { Square, Winner}  from '../';
+import { LeaderBoard } from '../LeaderBoard/LeaderBoard.js'
 import io from 'socket.io-client';
 import './Board.css';
 
@@ -7,10 +8,13 @@ const socket = io(); // Connects to socket connection
 
 function Board({ user }){
 
-    const [ players, setPlayers ]  = useState({ "O": "", "1": "", "spec": [] });
+    const [ players, setPlayers ]  = useState({ "0": "", "1": "", "spec": [] });
     const [ board, changeBoardArr ] = useState(Array(9).fill(''));
     const [ setPlayer, setPlayerState ] = useState(0);
     const [ playerStatus, setPlayerStatus] = useState(false);
+    const [ showandHide, setShowAndHide] = useState(false);
+    let gameStatus;
+    let winnerorno = "";
 
     function play(index, user){
         let boardChange = [...board];
@@ -27,6 +31,12 @@ function Board({ user }){
                 }
                 changeBoardArr(boardChange);
                 socket.emit('boardChange', {boardData: boardChange, setPlayerState: setPlayer });
+                winnerorno = Winner(boardChange);
+                if( typeof winnerorno != "undefined"){
+                    (winnerorno === "X")? 
+                    socket.emit('gameStatus', {win: players[0], lose: players[1]}): 
+                    socket.emit('gameStatus', {win: players[1], lose: players[0]});
+                }
             }
             else {
                 alert("You are not Playing!");
@@ -65,6 +75,12 @@ function Board({ user }){
             }
         });
     }
+    
+    function updateLeaderBoard(data){
+        socket.on('user_list', (data) =>{
+            console.log(data);
+        });   
+    }
 
     function resetBoard(){
         let emptyArr = [...board];
@@ -77,10 +93,11 @@ function Board({ user }){
     useEffect(() =>{
         updateUsers();
         updateBoard();
+        updateLeaderBoard();
     }, []);
     
-    let gameStatus;
-    const winnerorno = Winner(board);
+    
+    winnerorno = Winner(board);
     if(winnerorno === "O"){
         gameStatus = `Winner is ${players[1]}`;
     }
@@ -94,6 +111,11 @@ function Board({ user }){
         gameStatus = `The Game has Drawn`; 
     }
     
+    function onShowHide() {
+        setShowAndHide((prev) => {
+          return !showandHide;
+        });
+    }
     
 
     return (
@@ -105,24 +127,34 @@ function Board({ user }){
             <div class="userName">
                 {user}
             </div>
-            <div class="board">
-                {board.map((item, index) => <Square item={item} onClickButton = {() => play(index, user)} /> )}
-            </div>
-            { playerStatus && 
-                <div class = "button">
-                    <button  onClick = {resetBoard} > Reset Board </button>
+            <div class="container">
+                <div class="board">
+                    {board.map((item, index) => <Square item={item} onClickButton = {() => play(index, user)} /> )}
                 </div>
-            }
-            <div class="list">
-                <h2>
-                    Speactators
-                </h2>
-                <ul>
-                    {players['spec'].map((player) => <li> { player } </li> )}
-                </ul>
+                {playerStatus && 
+                    <div class = "button">
+                        <button  onClick = {resetBoard} > Reset Board </button>
+                    </div>
+                }
+                <div class="spec">
+                    <h2>
+                        Speactators
+                    </h2>
+                    <ul>
+                        {players['spec'].map((player) => <li> { player } </li> )}
+                    </ul>
+                </div>
+            </div>
+            <div class="leader">
+                <button onClick={onShowHide}> Leaderboard </button>
+                <div id="leaderboard" >
+                
+                    {showandHide &&  <LeaderBoard />}
+                </div>
             </div>
         </div>
     );
 }
 
+// {showandHide &&  <LeaderBoard  /> }
 export default Board;

@@ -13,7 +13,7 @@ function Board({ user }){
     const [ setPlayer, setPlayerState ] = useState(0);
     const [ playerStatus, setPlayerStatus] = useState(false);
     const [ showandHide, setShowAndHide] = useState(false);
-    const [ leaderBoard, setleaderBoard ] = useState([]);
+    const [ leaderBoard, setleaderBoard ] = useState();
     let gameStatus;
     let winnerorno = "";
 
@@ -81,7 +81,7 @@ function Board({ user }){
     function updateLeaderBoard(data){
         socket.on('updateLeaderBoard', (data) =>{
             console.log(data);
-            setleaderBoard([{data}]);
+            setleaderBoard([data]);
         });   
     }
 

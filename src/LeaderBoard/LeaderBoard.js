@@ -1,5 +1,4 @@
 import io from 'socket.io-client';
-import { useState, useEffect, Fragment } from 'react';
 import './LeaderBoard.css';
 
 const socket = io(); // Connects to socket connection
@@ -7,7 +6,7 @@ const socket = io(); // Connects to socket connection
 
 export function LeaderBoard( {leaderBoard, user} ){
     
-    console.log(user);
+    console.log(leaderBoard);
     return (
         <table>
             <thead>

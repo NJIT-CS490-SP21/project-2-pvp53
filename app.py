@@ -86,7 +86,7 @@ def on_join(data): # data is whatever arg you pass in your emit call on client
     db.session.commit()
     players = updateLeadeBoard()
     print(players)
-    socketio.emit('updateLeaderBoard', players, broadcast=True, include_self=False)
+    socketio.emit('updateLeaderBoard', players, broadcast=True)
     
 @socketio.on('loginStatus')
 def userLogin(data):
@@ -101,7 +101,7 @@ def userLogin(data):
     
     addUsertoDB(data['name'])
     players = updateLeadeBoard()
-    socketio.emit('updateLeaderBoard', players, broadcast=True, include_self=False)
+    socketio.emit('updateLeaderBoard', players, broadcast=True)
     socketio.emit('updateUser', userName, broadcast=True, include_self=False)
     
 

@@ -100,6 +100,8 @@ function Board({ user }){
     
     
     winnerorno = Winner(board);
+    // if(typeof winnerorno != "undefined"){
+    // }
     if(winnerorno === "O"){
         gameStatus = `Winner is ${players[1]}`;
     }

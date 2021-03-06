@@ -5,16 +5,9 @@ import './LeaderBoard.css';
 const socket = io(); // Connects to socket connection
 
 
-export function LeaderBoard( {leaderBoard} ){
+export function LeaderBoard( {leaderBoard, user} ){
     
-    leaderBoard.map((item, index) =>{
-        Object.keys(item).map(key =>{
-            
-            
-        })
-    });
-
-    
+    console.log(user);
     return (
         <table>
             <thead>
@@ -25,6 +18,16 @@ export function LeaderBoard( {leaderBoard} ){
             <tbody>
                 {leaderBoard.map((item) =>
                         Object.keys(item).map(key=>
+                        (key == user) ?
+                            <tr class="specialUser">
+                                <td > 
+                                    {key}
+                                </td>
+                                <td> 
+                                    {item[key]} 
+                                </td>
+                            </tr>
+                        :
                             <tr>
                                 <td> 
                                     {key} 

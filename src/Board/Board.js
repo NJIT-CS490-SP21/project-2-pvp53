@@ -88,7 +88,7 @@ function Board({ user }){
         let emptyArr = [...board];
         emptyArr.fill("");
         changeBoardArr(emptyArr);
-       // resetPlayerState();
+        resetPlayerState();
         socket.emit('boardChange', {boardData: emptyArr, setPlayerState: setPlayer })
     }
     
@@ -149,7 +149,7 @@ function Board({ user }){
                 <div class="leaderboard">
                     <button onClick={onShowHide}> LeaderBoard </button>
                     <div id="leaderboard" >
-                        {showandHide &&  <LeaderBoard  leaderBoard={leaderBoard}/>}
+                        {showandHide &&  <LeaderBoard  leaderBoard={leaderBoard} user={user}/>}
                     </div>
                 </div>
             </div>

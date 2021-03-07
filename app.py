@@ -26,10 +26,6 @@ userName = {
     'spec': []
 }
 
-playerIndex = 0
-# players = []
-
-#cd notes/react/react-starter
 def addUsertoDB(username):
     new_user = models.Person.query.filter_by(username=username).first()
     print("New User", new_user)

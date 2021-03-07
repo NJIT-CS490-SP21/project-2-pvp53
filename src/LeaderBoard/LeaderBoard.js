@@ -1,8 +1,6 @@
 import io from 'socket.io-client';
 import './LeaderBoard.css';
 
-const socket = io(); // Connects to socket connection
-
 
 export function LeaderBoard( {leaderBoard, user} ){
     

@@ -39,7 +39,7 @@ Deploying to Heroku with DB
 10. db.create_all()
 11. admin = models.Person(username='user1', scores= 100)
 12. db.session.add(admin)
-13. db.commit()
+13. db.session.commit()
 14. Ctrl + D or exit()
 15. heroku buildpacks:add --index 1 heroku/nodejs
 16. git push heroku {your-brachname if exist:}main, minius the braces.

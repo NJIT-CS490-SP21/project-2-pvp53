@@ -28,7 +28,6 @@ userName = {
 
 def addUsertoDB(username):
     new_user = models.Person.query.filter_by(username=username).first()
-    print("New User", new_user)
     if new_user == None:
         new_user = models.Person(username=username, scores=100)
         db.session.add(new_user)
@@ -40,7 +39,6 @@ def updateLeadeBoard():
     dbData = models.Person.query.order_by(models.Person.scores.desc()).all()
     for user in dbData:
         players.append({user.username : user.scores})
-    print(players)
     return players
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
@@ -68,7 +66,6 @@ def on_disconnect():
     
 @socketio.on('gameStatus')
 def on_join(data): # data is whatever arg you pass in your emit call on client
-    print("Here", str(data))
     winner = data['win']
     loser = data['lose']
     print(winner, loser)
@@ -85,6 +82,8 @@ def on_join(data): # data is whatever arg you pass in your emit call on client
     socketio.emit('updateLeaderBoard', players, broadcast=True)
     
 @socketio.on('loginStatus')
+
+
 def userLogin(data):
     global usersLogged 
     if((userName["0"] == "") or (userName["0"] == str(data['name']))):
@@ -103,7 +102,6 @@ def userLogin(data):
 
 @socketio.on('boardChange')
 def onChange(boardData):
-    print(str(boardData))
     socketio.emit('boardChange', boardData, boradcast=True, include_self=False)
     
     

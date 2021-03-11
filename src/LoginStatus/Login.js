@@ -1,4 +1,5 @@
 import { React, useRef } from 'react';
+import PropTypes from 'prop-types';
 import './Login.css';
 
 function Login({ userData }) {
@@ -18,5 +19,9 @@ function Login({ userData }) {
     </div>
   );
 }
+
+Login.propTypes = {
+  userData: PropTypes.string.isRequired,
+};
 
 export default Login;

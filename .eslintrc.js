@@ -17,6 +17,5 @@ module.exports = {
     'react-hooks/exhaustiSve-deps': 'off',
     'react/jsx-filename-extension': 'off',
     'import/no-cycle': 'off',
-    'react/prop-types': 'off'
   },
 };

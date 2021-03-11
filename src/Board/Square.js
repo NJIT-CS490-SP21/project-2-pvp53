@@ -1,4 +1,5 @@
 import { React } from 'react';
+import PropTypes from 'prop-types';
 
 function Square({ item, onClickButton }) {
   const i = item;
@@ -9,5 +10,10 @@ function Square({ item, onClickButton }) {
     </div>
   );
 }
+
+Square.propTypes = {
+  item: PropTypes.string.isRequired,
+  onClickButton: PropTypes.func.isRequired,
+};
 
 export default Square;

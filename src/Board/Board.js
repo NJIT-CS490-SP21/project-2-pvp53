@@ -1,7 +1,7 @@
 import { useState, useEffect, React } from 'react';
+import PropTypes from 'prop-types';
 import io from 'socket.io-client';
-import { Square, Winner } from '..';
-import { LeaderBoard } from '../LeaderBoard/LeaderBoard';
+import { Square, Winner, LeaderBoard } from '..';
 
 import './Board.css';
 
@@ -151,5 +151,9 @@ function Board({ user }) {
     </div>
   );
 }
+
+Board.propTypes = {
+  user: PropTypes.string.isRequired,
+};
 
 export default Board;

@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
 import io from 'socket.io-client';
-import { Board, Login } from '.';
+import { Board, Login } from './index';
 import './App.css';
 
 const socket = io(); // Connects to socket connection

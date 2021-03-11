@@ -1,4 +1,5 @@
 import { React } from 'react';
+import PropTypes from 'prop-types';
 import './LeaderBoard.css';
 
 function LeaderBoard({ leaderBoard, user }) {
@@ -25,5 +26,10 @@ function LeaderBoard({ leaderBoard, user }) {
     </table>
   );
 }
+
+LeaderBoard.propTypes = {
+  leaderBoard: PropTypes.string.isRequired,
+  user: PropTypes.string.isRequired,
+};
 
 export default LeaderBoard;

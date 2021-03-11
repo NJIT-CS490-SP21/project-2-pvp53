@@ -1,18 +1,18 @@
-.loginBox{
-    position: absolute;
-    width: 300px;
-    height: 200px;
-    top: 30%;
-    left: 50%;
-    margin: -100px 0 0 -150px;
+.loginBox {
+  position: absolute;
+  width: 300px;
+  height: 200px;
+  top: 30%;
+  left: 50%;
+  margin: -100px 0 0 -150px;
 }
 
-.button{
-    margin:0 auto;
-    display:block;
+.button {
+  margin: 0 auto;
+  display: block;
 }
 
-.header{
-    white-space: nowrap;
-    text-align: center;
+.header {
+  white-space: nowrap;
+  text-align: center;
 }

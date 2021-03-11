@@ -1,36 +1,41 @@
 .board {
-	width: 300px; /* Total horizontal dimensions */
-	height: 300px; /* Total vertical dimensions */
-	display: grid; /* Enables CSS Grid */ 
-	grid-template-columns: repeat(3, 1fr); /* Total horizontal space broken into 3 columns */
-  grid-template-rows: repeat(3, 1fr); /* Total vertical space broken into 3 rows */
+  width: 300px; /* Total horizontal dimensions */
+  height: 300px; /* Total vertical dimensions */
+  display: grid; /* Enables CSS Grid */
+  grid-template-columns: repeat(
+    3,
+    1fr
+  ); /* Total horizontal space broken into 3 columns */
+  grid-template-rows: repeat(
+    3,
+    1fr
+  ); /* Total vertical space broken into 3 rows */
   margin: auto;
-  left:0;
-  float:left;
+  left: 0;
+  float: left;
 }
 
-.spec{
-  text-align:center;
-  float:left;
-  width:300px;
-  height:300px;
-
+.spec {
+  text-align: center;
+  float: left;
+  width: 300px;
+  height: 300px;
 }
-.leaderboard{
-  float:right;
-  width:300px;
-  height:300px;
-}
-
-.container{
-  margin:auto;
-  grid-template-columns: repeat(3, 1fr); 
-  height:900px;
-  width:900px;
+.leaderboard {
+  float: right;
+  width: 300px;
+  height: 300px;
 }
 
-.body{
-  background-color: #E6DCC7;
+.container {
+  margin: auto;
+  grid-template-columns: repeat(3, 1fr);
+  height: 900px;
+  width: 900px;
+}
+
+.body {
+  background-color: #e6dcc7;
 }
 
 .box {
@@ -40,29 +45,26 @@
   /* Shows the lines in the CSS grid */
 }
 
-.userName{
+.userName {
   text-align: center;
   font-size: 70px;
 }
 
-.gameStatus{
+.gameStatus {
   text-align: center;
   font-size: 80px;
 }
 
-.button{
+.button {
   text-align: center;
 }
 
-ul{
+ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.leader{
-  padding-top:100px;
+.leader {
+  padding-top: 100px;
 }
-
-
-

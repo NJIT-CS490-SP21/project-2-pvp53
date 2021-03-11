@@ -3,17 +3,18 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-export {default as Board } from './Board/Board';
-export {default as Square } from './Board/Square';
-export {default as Winner } from './Board/Winner';
-export {default as Login } from './LoginStatus/Login';
-// export {default as Leaderboard } from './LeaderBoard/LeaderBoard';
+
+export { default as Board } from './Board/Board';
+export { default as Square } from './Board/Square';
+export { default as Winner } from './Board/Winner';
+export { default as Login } from './LoginStatus/Login';
+export { default as LeaderBoard } from './LeaderBoard/LeaderBoard';
 
 ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 // If you want to start measuring performance in your app, pass a function

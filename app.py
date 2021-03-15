@@ -1,3 +1,9 @@
+'''
+@file app.py
+This file is the entire backend of the tic-tac-toe created in this project and uses
+flask, db, and socketio to fullfill the requirements for this project.
+'''
+
 import os
 from flask import Flask, send_from_directory, json
 from flask_socketio import SocketIO
@@ -19,56 +25,113 @@ db = SQLAlchemy(app)
 import models
 db.create_all()
 
-# #GLOBAL VARIABLES
-userName = {"0": "", "1": "", 'spec': []}
+#GLOBAL VARIABLES
+USER_NAME = {'0': "", '1': "", 'spec': []}
 
+def add_user(data):
+    '''
+    This method updates the global USER_NAME variable
+    @data is the username 
+    '''
+    if ((USER_NAME['0'] == "") or (USER_NAME['0'] == str(data))):
+        USER_NAME['0'] = str(data)
+    elif ((USER_NAME['1'] == '') or (USER_NAME['1'] == str(data))):
+        USER_NAME['1'] = str(data)
+    else:
+        if str(data) not in USER_NAME['spec']:
+            USER_NAME['spec'].append(str(data))
+    return USER_NAME
 
-def addUsertoDB(username):
+def add_user_to_db(username):
+    '''
+    This method is simply to query the username from the database check if the
+    user is in there if its not there add it otherwise don't do anything. While
+    youre adding to it, instantiating the scores to 100.
+    @param username : the username that the user entered
+    '''
     new_user = models.Person.query.filter_by(username=username).first()
-    if new_user == None:
+    if new_user is None:
         new_user = models.Person(username=username, scores=100)
         db.session.add(new_user)
         db.session.commit()
 
-
-def updateLeadeBoard():
+def add_user_to_db_mock(username):
+    '''
+    This method is simply to query the username from the database check if the
+    user is in there if its not there add it otherwise don't do anything. While
+    youre adding to it, instantiating the scores to 100.
+    @param username : the username that the user entered
+    '''
+    new_user = models.Person(username=username, scores=100)
+    db.session.add(new_user)
+    db.session.commit()
+    
+    database_players = models.Person.query.all()
+    
     players = []
-    dbData = models.Person.query.order_by(models.Person.scores.desc()).all()
-    for user in dbData:
+    for user in database_players:
+        players.append(user.username)
+    return players
+
+def update_leaderboard():
+    '''
+    This method does not take any parameters and it basically updates the leaderboard
+    using the users playing and their score and returns a list of objects within.
+    @return players
+    '''
+    players = []
+    data_base_data = models.Person.query.order_by(models.Person.scores.desc()).all()
+    for user in data_base_data:
         players.append({user.username: user.scores})
     return players
 
 
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
-socketio = SocketIO(app,
-                    cors_allowed_origins="*",
-                    json=json,
-                    manage_session=False)
+CORS = CORS(app, resources={r"/*": {"origins": "*"}})
+socket_io = SocketIO(app,
+                     cors_allowed_origins="*",
+                     json=json,
+                     manage_session=False)
 
 
 @app.route('/', defaults={"filename": "index.html"})
 @app.route('/<path:filename>')
 def index(filename):
+    '''
+    This function runs the index.html file
+    '''
     return send_from_directory('./build', filename)
 
 
 # When a client connects from this Socket connection, this function is run
-@socketio.on('connect')
+@socket_io.on('connect')
 def on_connect():
+    '''
+    This function prints 'User connected!' when the @SOCKET_IO has connected with
+    the front end
+    '''
     print('User connected!')
 
 
 # When a client disconnects from this Socket connection, this function is run
-@socketio.on('disconnect')
+@socket_io.on('disconnect')
 def on_disconnect():
+    '''
+    This function prints 'User disconnected!' when the @SOCKET_IO has disconnected with
+    the front end
+    '''
     print('User disconnected!')
 
 
-@socketio.on('gameStatus')
-def on_join(data):  # data is whatever arg you pass in your emit call on client
-    winner = data['win']
-    loser = data['lose']
-    print(winner, loser)
+@socket_io.on('gameStatus')
+def game_status(data_leaderboard):
+    '''
+    This function gets called when there is a winner in the tic-tac-toe board
+    and updates the leaderBoard by emmiting back to the front end where the win logic has
+    been implemented
+    @param data is a object which consists of winner and loser for the game played
+    '''
+    winner = data_leaderboard['win']
+    loser = data_leaderboard['lose']
     db.session.query(models.Person)\
       .filter(models.Person.username == winner)\
       .update({models.Person.scores: models.Person.scores + 1})
@@ -77,36 +140,37 @@ def on_join(data):  # data is whatever arg you pass in your emit call on client
       .filter(models.Person.username == loser)\
       .update({models.Person.scores: models.Person.scores - 1})
     db.session.commit()
-    players = updateLeadeBoard()
-    print(players)
-    socketio.emit('updateLeaderBoard', players, broadcast=True)
-    
-
-@socketio.on('loginStatus')
-def userLogin(data):
-    global usersLogged
-    if ((userName["0"] == "") or (userName["0"] == str(data['name']))):
-        userName["0"] = str(data['name'])
-    elif ((userName["1"] == "") or (userName["1"] == str(data['name']))):
-        userName["1"] = str(data['name'])
-    else:
-        if (str(data['name']) not in userName['spec']):
-            userName['spec'].append(str(data['name']))
-
-    addUsertoDB(data['name'])
-    players = updateLeadeBoard()
-    socketio.emit('updateLeaderBoard', players, broadcast=True)
-    socketio.emit('updateUser', userName, broadcast=True, include_self=False)
+    players = update_leaderboard()
+    socket_io.emit('updateLeaderBoard', players, broadcast=True)
 
 
-@socketio.on('boardChange')
-def onChange(boardData):
-    socketio.emit('boardChange', boardData, boradcast=True, include_self=False)
+@socket_io.on('loginStatus')
+def user_login(data):
+    '''
+    This method is used to update our global USER_NAME dictionary with the players playing
+    and the spec, spectating and calls update_leaderboard to split up the jobs at will
+    and emits the updated leaderboard and the users to the front end to update it there
+    @param data is an object which contains the name of the user that wants to play or spectate
+    '''
+    user_names = add_user(data['name'])
+    add_user_to_db(data['name'])
+    players = update_leaderboard()
+    socket_io.emit('updateLeaderBoard', players, broadcast=True)
+    socket_io.emit('updateUser', user_names, broadcast=True, include_self=False)
+
+
+@socket_io.on('boardChange')
+def on_change(board_data):
+    '''
+    This method is called when there has been a change in the board, i.e,. userX input,
+    userO input, reset board and so on.
+    '''
+    socket_io.emit('boardChange', board_data, boradcast=True, include_self=False)
 
 
 if __name__ == "__main__":
     # Note that we don't call app.run anymore. We call socketio.run with app arg
-    socketio.run(
+    socket_io.run(
         app,
         host=os.getenv('IP', '0.0.0.0'),
         port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),

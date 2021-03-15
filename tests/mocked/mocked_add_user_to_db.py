@@ -63,7 +63,6 @@ class DBTestCase(unittest.TestCase):
                 with patch('app.db.session.commit', self.mocked_db_session_commit):
                     with patch('models.Person.query') as mocked_query:
                         mocked_query.all = self.mocked_person_query_all
-    
                         actual_result = app.add_user_to_db_mock(test[KEY_INPUT])
                         expected_result = test[KEY_EXPECTED]
                         self.assertEqual(len(actual_result), len(expected_result))

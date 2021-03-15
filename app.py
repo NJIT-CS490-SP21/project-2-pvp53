@@ -4,7 +4,7 @@ This file is the entire backend of the tic-tac-toe created in this project and u
 flask, db, and socketio to fullfill the requirements for this project.
 '''
 
-import os
+import os, copy
 from flask import Flask, send_from_directory, json
 from flask_socketio import SocketIO
 from flask_cors import CORS
@@ -27,6 +27,7 @@ db.create_all()
 
 #GLOBAL VARIABLES
 USER_NAME = {'0': "", '1': "", 'spec': []}
+UPDATE_BOARD = ['','','','','','','','','']
 
 def add_user(data):
     '''
@@ -57,9 +58,7 @@ def add_user_to_db(username):
 
 def add_user_to_db_mock(username):
     '''
-    This method is simply to query the username from the database check if the
-    user is in there if its not there add it otherwise don't do anything. While
-    youre adding to it, instantiating the scores to 100.
+    This method is simply to mock the db
     @param username : the username that the user entered
     '''
     new_user = models.Person(username=username, scores=100)
@@ -72,6 +71,16 @@ def add_user_to_db_mock(username):
     for user in database_players:
         players.append(user.username)
     return players
+    
+def update_mock_board_index(data):
+    '''
+    This method is simply to mock the updated board
+    @param data has the updated board
+    '''
+    UPDATE_BOARD = copy.copy(data)
+    x_count = data.count('X')
+    o_count = data.count('O')
+    return x_count, o_count
 
 def update_leaderboard():
     '''

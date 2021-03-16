@@ -13,7 +13,7 @@ function Login({ userData }) {
       </h1>
       <input className="button" ref={user} id="userID" type="text" />
       <br />
-      <button type="submit" className="button" onClick={() => users(user.current.value)}>
+      <button type="submit" className="login_button" onClick={() => users(user.current.value)}>
         LogIn
       </button>
     </div>

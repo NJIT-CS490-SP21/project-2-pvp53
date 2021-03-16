@@ -5,7 +5,7 @@ import Login from './LoginStatus/Login';
 
 test('LeaderBoard', () => {
     //render(<LeaderBoard/>);
-    const leaderboard = render(<Board user="user1"/>);
+    render(<Board user="user1"/>);
     const button = screen.getByText('LeaderBoard');
     expect(button).toBeInTheDocument();
     fireEvent.click(button);
@@ -13,15 +13,26 @@ test('LeaderBoard', () => {
     expect(leaderBoard_status).toBeInTheDocument();
 });
 
-test('Login', () => {
-  const Login = render(<App />);
+test('Login check status', () => {
+  render(<App />);
   // const element = screen.getByText('Let\'s Play!');
   // expect(element).toBeInTheDocument();
   const button = screen.getByText('LogIn');
   expect(button).toBeInTheDocument();
   fireEvent.click(button);
   const element = screen.getByText('Speactators');
-  expect(element.toBeInTheDocument);
+  expect(element).toBeInTheDocument();
 });
 
 
+test('Logged In Button',  () => {
+  render(<App />)
+  const button = screen.getByText("LogIn");
+  expect(button).toBeInTheDocument();
+  fireEvent.click(button);
+  expect(button).not.toBeInTheDocument()
+  // expect(cell).toBeInTheDocument()
+  // fireEvent.click(cell);
+  // const X = cell.value;
+  // expect(X).toBeInTheDocument();
+});

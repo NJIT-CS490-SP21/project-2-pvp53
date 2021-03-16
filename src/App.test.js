@@ -25,6 +25,3 @@ test('Login', () => {
 });
 
 
-test('Board Click', () =>{
-  render(<Board user='user1'/>);
-});

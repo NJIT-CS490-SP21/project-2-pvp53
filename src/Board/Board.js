@@ -1,7 +1,9 @@
 import { useState, useEffect, React } from 'react';
 import PropTypes from 'prop-types';
 import io from 'socket.io-client';
-import { Square, Winner, LeaderBoard } from '..';
+import Square from './Square';
+import Winner from './Winner';
+import LeaderBoard from '../LeaderBoard/LeaderBoard';
 
 import './Board.css';
 
@@ -13,7 +15,7 @@ function Board({ user }) {
   const [setPlayer, setPlayerState] = useState(0);
   const [playerStatus, setPlayerStatus] = useState(false);
   const [showandHide, setShowAndHide] = useState(false);
-  const [leaderBoard, setleaderBoard] = useState();
+  const [leaderBoard, setleaderBoard] = useState([]);
   let gameStatus;
   let winnerorno = '';
 
@@ -140,7 +142,7 @@ function Board({ user }) {
           </ul>
         </div>
         <div className="leaderboard">
-          <button type="submit" onClick={onShowHide}> LeaderBoard </button>
+          <button className="leaderBoard_button" type="submit" onClick={onShowHide}> LeaderBoard </button>
           <div id="leaderboard">
             {showandHide && (
               <LeaderBoard leaderBoard={leaderBoard} user={user} />

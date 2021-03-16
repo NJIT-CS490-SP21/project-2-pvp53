@@ -7,7 +7,7 @@ function LeaderBoard({ leaderBoard, user }) {
     <table>
       <thead>
         <tr>
-          <th colSpan="2"> LeaderBoard </th>
+          <th colSpan="2"> Scoreboard </th>
         </tr>
       </thead>
       <tbody>
